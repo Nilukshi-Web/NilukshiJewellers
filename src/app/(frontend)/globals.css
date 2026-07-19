@@ -44,7 +44,16 @@
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
   --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-jost);
+  --font-serif: var(--font-cormorant);
+
+  /* AMARÉ brand palette */
+  --color-wine: #933b5b;
+  --color-sand: #e3d6bf;
+  --color-sage: #aabaae;
+  --color-bronze: #9f9679;
+  --color-ink: #2b2320;
+  --color-cream: #fbf8f3;
 }
 
 @layer utilities {
@@ -87,31 +96,32 @@
 }
 
 :root {
-  --background: oklch(100% 0 0deg);
-  --foreground: oklch(14.5% 0 0deg);
-  --card: oklch(96.5% 0.005 265deg);
-  --card-foreground: oklch(14.5% 0 0deg);
-  --popover: oklch(100% 0 0deg);
-  --popover-foreground: oklch(14.5% 0 0deg);
-  --primary: oklch(20.5% 0 0deg);
-  --primary-foreground: oklch(98.5% 0 0deg);
-  --secondary: oklch(97% 0 0deg);
-  --secondary-foreground: oklch(20.5% 0 0deg);
-  --muted: oklch(97% 0 0deg);
-  --muted-foreground: oklch(55.6% 0 0deg);
-  --accent: oklch(97% 0 0deg);
-  --accent-foreground: oklch(20.5% 0 0deg);
+  /* AMARÉ light theme */
+  --background: #fbf8f3;
+  --foreground: #2b2320;
+  --card: #f5efe4;
+  --card-foreground: #2b2320;
+  --popover: #ffffff;
+  --popover-foreground: #2b2320;
+  --primary: #933b5b;
+  --primary-foreground: #ffffff;
+  --secondary: #e3d6bf;
+  --secondary-foreground: #2b2320;
+  --muted: #efe8da;
+  --muted-foreground: #6b6258;
+  --accent: #e3d6bf;
+  --accent-foreground: #2b2320;
   --destructive: oklch(57.7% 0.245 27.325deg);
   --destructive-foreground: oklch(57.7% 0.245 27.325deg);
-  --border: oklch(92.2% 0 0deg);
-  --input: oklch(92.2% 0 0deg);
-  --ring: oklch(70.8% 0 0deg);
+  --border: #ded5c0;
+  --input: #d8cdb4;
+  --ring: #933b5b;
   --chart-1: oklch(64.6% 0.222 41.116deg);
   --chart-2: oklch(60% 0.118 184.704deg);
   --chart-3: oklch(39.8% 0.07 227.392deg);
   --chart-4: oklch(82.8% 0.189 84.429deg);
   --chart-5: oklch(76.9% 0.188 70.08deg);
-  --radius: 0.625rem;
+  --radius: 0rem;
   --sidebar: oklch(98.5% 0 0deg);
   --sidebar-foreground: oklch(14.5% 0 0deg);
   --sidebar-primary: oklch(20.5% 0 0deg);

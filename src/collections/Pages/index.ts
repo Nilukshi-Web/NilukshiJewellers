@@ -4,9 +4,16 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
+import { ContactChannels } from '../../blocks/ContactChannels/config'
 import { Content } from '../../blocks/Content/config'
+import { CustomCommission } from '../../blocks/CustomCommission/config'
+import { FeaturedProducts } from '../../blocks/FeaturedProducts/config'
 import { FormBlock } from '../../blocks/Form/config'
+import { HeroCarousel } from '../../blocks/HeroCarousel/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { MetalShowcase } from '../../blocks/MetalShowcase/config'
+import { ProductCatalog } from '../../blocks/ProductCatalog/config'
+import { PromoStrip } from '../../blocks/PromoStrip/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -72,7 +79,20 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [
+                HeroCarousel,
+                MetalShowcase,
+                FeaturedProducts,
+                PromoStrip,
+                ProductCatalog,
+                CustomCommission,
+                ContactChannels,
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                FormBlock,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,
