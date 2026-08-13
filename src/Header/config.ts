@@ -15,7 +15,7 @@ export const Header: GlobalConfig = {
         {
           name: 'brandName',
           type: 'text',
-          defaultValue: 'AMARÉ',
+          defaultValue: 'NILUKSHI',
           admin: { width: '50%', description: 'Main logo wordmark.' },
         },
         {

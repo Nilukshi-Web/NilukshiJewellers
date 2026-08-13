@@ -4,7 +4,7 @@ import React, { createContext, use, useEffect } from 'react'
 
 import type { ThemeContextType } from './types'
 
-// The AMARÉ storefront is a single, light-only brand theme. We intentionally
+// The NILUKSHI storefront is a single, light-only brand theme. We intentionally
 // ignore the OS `prefers-color-scheme` and any stored preference so the
 // hardcoded cream/wine/ink palette always renders with dark text on light
 // backgrounds. (The Payload admin panel keeps its own independent theme.)

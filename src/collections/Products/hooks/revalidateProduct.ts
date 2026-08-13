@@ -1,6 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { Product } from '../../../payload-types'
 
@@ -20,6 +20,7 @@ export const revalidateProduct: CollectionAfterChangeHook<Product> = ({
 
     // Product cards appear on catalog and home pages
     revalidatePath('/', 'layout')
+    revalidateTag('products-sitemap', 'max')
   }
   return doc
 }
@@ -31,6 +32,7 @@ export const revalidateProductDelete: CollectionAfterDeleteHook<Product> = ({
   if (!context.disableRevalidate) {
     revalidatePath(`/products/${doc?.slug}`)
     revalidatePath('/', 'layout')
+    revalidateTag('products-sitemap', 'max')
   }
   return doc
 }

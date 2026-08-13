@@ -13,9 +13,10 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
+import { CDN_URL, cdnFileURL } from '@/utilities/cdn'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | AMARÉ Jewellers` : 'AMARÉ Jewellers'
+  return doc?.title ? `${doc.title} | NILUKSHI Jewellers` : 'NILUKSHI Jewellers'
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
@@ -89,11 +90,10 @@ export const plugins: Plugin[] = [
     ? [
         s3Storage({
           collections: {
-            media: process.env.S3_CDN_URL
+            media: CDN_URL
               ? {
                   disablePayloadAccessControl: true,
-                  generateFileURL: ({ filename, prefix }) =>
-                    `${process.env.S3_CDN_URL}/${prefix ? `${prefix}/` : ''}${filename}`,
+                  generateFileURL: ({ filename, prefix }) => cdnFileURL(filename, prefix) || '',
                 }
               : true,
           },

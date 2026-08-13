@@ -3,11 +3,12 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, MapPin, Menu, Phone, X } from 'lucide-react'
+import { ChevronDown, MapPin, Menu, Phone, Search as SearchIcon, X } from 'lucide-react'
 
 import type { Header, Metal, ProductCategory, SiteSetting } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
+import { ProductSearch } from '@/components/ProductSearch'
 
 interface HeaderClientProps {
   categories: ProductCategory[]
@@ -62,7 +63,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({
 
           <Link href="/" className="flex flex-col leading-none text-wine">
             <span className="font-serif text-3xl tracking-[0.12em]">
-              {data?.brandName || 'AMARÉ'}
+              {data?.brandName || 'NILUKSHI'}
             </span>
             {data?.brandTagline && (
               <span className="mt-0.5 text-[0.55rem] tracking-[0.35em] text-bronze">
@@ -121,13 +122,21 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({
             })}
           </nav>
 
-          {/* spacer keeps the logo left-aligned on mobile */}
-          <div className="ml-auto md:hidden" />
+          <ProductSearch
+            className="ml-auto hidden w-52 shrink-0 md:block lg:w-64"
+            placeholder="Search products…"
+          />
+
+          <Link href="/search" aria-label="Search" className="ml-auto md:hidden">
+            <SearchIcon size={20} strokeWidth={1.4} />
+          </Link>
         </div>
 
         {/* Mobile nav */}
         {mobileOpen && (
           <div className="flex flex-col gap-1 border-t border-bronze/25 bg-white px-6 pb-6 pt-3 md:hidden">
+            <ProductSearch className="mb-2" placeholder="Search products…" />
+
             {metals.length > 0 && (
               <>
                 <div className="mt-2 font-serif text-lg text-wine">Jewellery</div>

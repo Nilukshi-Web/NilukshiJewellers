@@ -1,4 +1,4 @@
-// AMARÉ Jewellers seed data, migrated from the original single-file demo app.
+// NILUKSHI Jewellers seed data, migrated from the original single-file demo app.
 
 export const metalSeeds = [
   { name: 'Yellow Gold', slug: 'yellow-gold', swatchColor: '#C9A24B', order: 0 },
@@ -49,16 +49,31 @@ type ProductSeed = {
   featured: boolean
   description: string
   story: string
-  specs: {
-    material?: string
-    stoneType?: string
-    stoneColor?: string
-    cut?: string
-    count?: string
-    carat?: string
-    size?: string
-  }
+  specs: Partial<Record<SpecKey, string>>
 }
+
+type SpecKey = 'material' | 'stoneType' | 'stoneColor' | 'cut' | 'count' | 'carat' | 'size'
+
+/**
+ * Labels used when the seed's keyed spec objects are flattened into the
+ * repeatable `specs` rows the Products collection now stores. Editors are free
+ * to add any label they like once a product exists — this only seeds sensible
+ * defaults, and controls the row order.
+ */
+const specLabels: { key: SpecKey; label: string }[] = [
+  { key: 'material', label: 'Material' },
+  { key: 'stoneType', label: 'Stone' },
+  { key: 'stoneColor', label: 'Stone Colour' },
+  { key: 'cut', label: 'Cut' },
+  { key: 'count', label: 'Count' },
+  { key: 'carat', label: 'Carat' },
+  { key: 'size', label: 'Size' },
+]
+
+export const toSpecRows = (specs: ProductSeed['specs']): { label: string; value: string }[] =>
+  specLabels
+    .filter(({ key }) => specs[key])
+    .map(({ key, label }) => ({ label, value: specs[key]! }))
 
 export const productSeeds: ProductSeed[] = [
   {

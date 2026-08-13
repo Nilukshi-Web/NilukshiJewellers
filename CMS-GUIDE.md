@@ -1,4 +1,4 @@
-# AMARÉ Jewellers — Website Manager Guide
+# NILUKSHI Jewellers — Website Manager Guide
 
 A plain-English guide to running your website. No technical knowledge needed.
 
@@ -89,7 +89,7 @@ Here's every field and **exactly what it changes on the live site:**
 | **Featured** | Tick to feature this piece | Featured products can appear in the **"This Season's Edit"** section on the homepage. |
 | **Description** | A short paragraph about the piece | The main text on the product's page, under the price. |
 | **The Story** | Optional — the story or inspiration behind the piece | Appears in a highlighted "The Story" box on the product page. Leave blank to hide the box. |
-| **Specifications** | Material, Size, Stone Type, Stone Colour, Cut, Count, Carat | Shown as a neat details table on the product page. **Any box you leave empty is simply hidden** — you don't need to fill them all. |
+| **Specifications** | Click **Add Specification** for each detail you want to list, and fill in the two boxes: a **Label** (e.g. `Material`, `Carat`, `Stone Colour`) and a **Value** (e.g. `18k yellow gold`) | Shown as a neat details table on the product page, in the order you list them. **Add as many or as few rows as the piece needs** — use the ⠿ handle to drag rows into a different order, and the ⋮ menu to remove one. |
 
 **When you're done:** click **Save** (or **Publish** — see [Section 12](#12-saving-publishing--previewing)). The product appears on the site right away.
 
@@ -171,7 +171,7 @@ Controls the bar at the top of every page. Find it under **Header** in the left 
 
 | Field | What it does |
 |---|---|
-| **Brand Name** | The big logo word, "AMARÉ". |
+| **Brand Name** | The big logo word, "NILUKSHI". |
 | **Brand Tagline** | The small word under the logo, "JEWELLERS". |
 | **Top Bar Text** | The label of the contact link in the thin bar at the very top ("Contact Us"). |
 | **Nav Items** | The list of menu links across the top. |
@@ -192,7 +192,7 @@ Controls the dark strip at the bottom of every page. Find it under **Footer** in
 |---|---|
 | **Blurb** | The short paragraph under the logo in the footer. |
 | **Visit / Contact / Follow Headings** | The little titles above each footer column. |
-| **Copyright** | The line at the very bottom (e.g. "© 2026 AMARÉ Jewellers…"). |
+| **Copyright** | The line at the very bottom (e.g. "© 2026 NILUKSHI Jewellers…"). |
 | **Nav Items** | Optional extra links in the footer (e.g. a "Contact page" link). |
 
 > Remember: the footer's **address, phone, email and social icons** come from **Site Settings** (Section 7), not from here.

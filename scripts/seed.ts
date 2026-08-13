@@ -43,7 +43,10 @@ async function run() {
   process.exit(0)
 }
 
-run().catch((err) => {
+// Awaited at the top level: `payload run` exits once this module finishes
+// evaluating, so a floating promise here would end the process before the
+// database is even connected.
+await run().catch((err) => {
   console.error(err)
   process.exit(1)
 })

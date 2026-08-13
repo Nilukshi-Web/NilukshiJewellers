@@ -2,7 +2,7 @@ import type { CollectionSlug, File, Payload, PayloadRequest } from 'payload'
 
 import type { Media } from '@/payload-types'
 
-import { categorySeeds, heroImageSeeds, metalSeeds, productSeeds } from './amare-data'
+import { categorySeeds, heroImageSeeds, metalSeeds, productSeeds, toSpecRows } from './amare-data'
 import { contactFormSeed, customEnquiryFormSeed } from './amare-forms'
 import {
   aboutPage,
@@ -38,19 +38,21 @@ export const seed = async ({
   payload: Payload
   req: PayloadRequest
 }): Promise<void> => {
-  payload.logger.info('Seeding AMARÉ Jewellers database...')
+  payload.logger.info('Seeding NILUKSHI Jewellers database...')
 
   payload.logger.info(`— Clearing collections...`)
 
-  await Promise.all(
-    collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
-  )
+  // Sequential, not Promise.all: deleting from these related tables at the same
+  // time deadlocks Postgres (40P01) while it takes locks on shared rows.
+  for (const collection of collections) {
+    await payload.db.deleteMany({ collection, req, where: {} })
+  }
 
-  await Promise.all(
-    collections
-      .filter((collection) => Boolean(payload.collections[collection].config.versions))
-      .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
-  )
+  for (const collection of collections) {
+    if (payload.collections[collection].config.versions) {
+      await payload.db.deleteVersions({ collection, req, where: {} })
+    }
+  }
 
   payload.logger.info(`— Seeding metals and categories...`)
 
@@ -141,7 +143,7 @@ export const seed = async ({
         featured: product.featured,
         description: product.description,
         story: product.story,
-        specs: product.specs,
+        specs: toSpecRows(product.specs),
       },
     })
   }
@@ -163,6 +165,11 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding pages...`)
 
+  // Each page's social/meta image is the product photo that best represents it.
+  const mediaBySlug = Object.fromEntries(
+    productSeeds.map((product, i) => [product.slug, productMedia[i] || heroMedia[0]]),
+  ) as Record<string, Media>
+
   const [
     _home,
     jewelleryDoc,
@@ -182,37 +189,40 @@ export const seed = async ({
       collection: 'pages',
       depth: 0,
       context: { disableRevalidate: true },
-      data: jewelleryPage(),
+      data: jewelleryPage({ metaImage: mediaBySlug['vasanti-bridal-necklace'] }),
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
       context: { disableRevalidate: true },
-      data: gemsPage(),
+      data: gemsPage({ metaImage: mediaBySlug['ceylon-blue-sapphire-3-4ct'] }),
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
       context: { disableRevalidate: true },
-      data: silverPage(),
+      data: silverPage({ metaImage: mediaBySlug['silver-betel-leaf-tray'] }),
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
       context: { disableRevalidate: true },
-      data: customPage({ enquiryForm }),
+      data: customPage({
+        enquiryForm,
+        metaImage: mediaBySlug['bespoke-design-consultation'],
+      }),
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
       context: { disableRevalidate: true },
-      data: aboutPage(),
+      data: aboutPage({ metaImage: heroMedia[0] }),
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
       context: { disableRevalidate: true },
-      data: contactPage({ contactForm }),
+      data: contactPage({ contactForm, metaImage: heroMedia[1] }),
     }),
   ])
 
@@ -235,7 +245,7 @@ export const seed = async ({
       slug: 'header',
       context: { disableRevalidate: true },
       data: {
-        brandName: 'AMARÉ',
+        brandName: 'NILUKSHI',
         brandTagline: 'JEWELLERS',
         topBarText: 'Contact Us',
         navItems: [
@@ -256,7 +266,7 @@ export const seed = async ({
         visitHeading: 'Visit',
         contactHeading: 'Contact',
         followHeading: 'Follow',
-        copyright: '© 2026 AMARÉ Jewellers. All rights reserved.',
+        copyright: '© 2026 NILUKSHI Jewellers. All rights reserved.',
         navItems: [pageRef(contactDoc, 'Contact page →')],
       },
     }),
@@ -266,21 +276,21 @@ export const seed = async ({
       data: {
         whatsapp: '94771234567',
         phone: '+94 11 234 5678',
-        email: 'hello@amarejewellers.com',
-        instagram: 'https://instagram.com/amarejewellers',
-        facebook: 'https://facebook.com/amarejewellers',
+        email: 'hello@nilukshijewellers.com',
+        instagram: 'https://instagram.com/nilukshijewellers',
+        facebook: 'https://facebook.com/nilukshijewellers',
         address: '24 Ward Place, Colombo 07, Sri Lanka',
         hours: 'Mon – Sat, 10am – 7pm',
         whatsappMessages: {
-          general: 'Hi AMARÉ, I have a question.',
-          product: 'Hi AMARÉ, I’m interested in “{product}” ({price}). Is it available?',
-          custom: 'Hi AMARÉ, I’d like to discuss a custom jewellery piece.',
+          general: 'Hi NILUKSHI, I have a question.',
+          product: 'Hi NILUKSHI, I’m interested in “{product}” ({price}). Is it available?',
+          custom: 'Hi NILUKSHI, I’d like to discuss a custom jewellery piece.',
         },
       },
     }),
   ])
 
-  payload.logger.info('Seeded AMARÉ Jewellers database successfully!')
+  payload.logger.info('Seeded NILUKSHI Jewellers database successfully!')
 }
 
 async function fetchFileByURL(url: string, name?: string): Promise<File> {

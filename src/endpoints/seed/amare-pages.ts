@@ -65,15 +65,19 @@ export const homePage = (args: {
       ],
     },
   ],
+  // Meta titles are seeded without the brand name — generateMeta() appends
+  // " | NILUKSHI Jewellers" to every page title.
   meta: {
-    title: 'AMARÉ Jewellers — Fine Jewellery, Colombo',
+    title: 'Fine Jewellery Handcrafted in Colombo',
     description:
-      'Fine jewellery crafted in Colombo. Yellow, white and rose gold, Ceylon gems, silver articles and custom commissions.',
+      'Fine jewellery crafted in Colombo. Yellow, white and rose gold, Ceylon gems, silver articles and custom commissions, made to order in our atelier.',
     image: args.metaImage.id,
   },
 })
 
-export const jewelleryPage = (): RequiredDataFromCollectionSlug<'pages'> => ({
+export const jewelleryPage = (args: {
+  metaImage: Media
+}): RequiredDataFromCollectionSlug<'pages'> => ({
   title: 'Jewellery',
   slug: 'jewellery',
   _status: 'published',
@@ -86,9 +90,15 @@ export const jewelleryPage = (): RequiredDataFromCollectionSlug<'pages'> => ({
       emptyStateText: 'No pieces here yet — check back soon.',
     },
   ],
+  meta: {
+    title: 'Gold Jewellery — Rings & Necklaces',
+    description:
+      'Handcrafted 18k and 22k gold jewellery in yellow, white and rose tones — rings, necklaces, bangles, earrings and pendants, gem-set in Colombo.',
+    image: args.metaImage.id,
+  },
 })
 
-export const gemsPage = (): RequiredDataFromCollectionSlug<'pages'> => ({
+export const gemsPage = (args: { metaImage: Media }): RequiredDataFromCollectionSlug<'pages'> => ({
   title: 'Gems',
   slug: 'gems',
   _status: 'published',
@@ -103,9 +113,15 @@ export const gemsPage = (): RequiredDataFromCollectionSlug<'pages'> => ({
       emptyStateText: 'No stones here yet — check back soon.',
     },
   ],
+  meta: {
+    title: 'Ceylon Gems & Natural Diamonds',
+    description:
+      'Natural diamonds, Ceylon sapphires and precious and semi-precious stones — GIA-certified, sold loose or set in-house by our Colombo goldsmiths.',
+    image: args.metaImage.id,
+  },
 })
 
-export const silverPage = (): RequiredDataFromCollectionSlug<'pages'> => ({
+export const silverPage = (args: { metaImage: Media }): RequiredDataFromCollectionSlug<'pages'> => ({
   title: 'Silver Articles',
   slug: 'silver',
   _status: 'published',
@@ -120,10 +136,17 @@ export const silverPage = (): RequiredDataFromCollectionSlug<'pages'> => ({
       emptyStateText: 'No pieces here yet — check back soon.',
     },
   ],
+  meta: {
+    title: 'Ceremonial Silver Articles',
+    description:
+      'Hand-made ceremonial silver, from betel trays to keepsake gifts — crafted in our Colombo workshop by silversmiths continuing a long tradition.',
+    image: args.metaImage.id,
+  },
 })
 
 export const customPage = (args: {
   enquiryForm: Form
+  metaImage: Media
 }): RequiredDataFromCollectionSlug<'pages'> => ({
   title: 'Custom Jewellery',
   slug: 'custom',
@@ -146,9 +169,15 @@ export const customPage = (args: {
       introContent: richText([heading('Or send us your idea', 'h3')]),
     },
   ],
+  meta: {
+    title: 'Custom Jewellery & Commissions',
+    description:
+      'Bring us a sketch, an heirloom stone or just an idea. Our designers craft one-of-a-kind pieces from first drawing to final polish, made only for you.',
+    image: args.metaImage.id,
+  },
 })
 
-export const aboutPage = (): RequiredDataFromCollectionSlug<'pages'> => ({
+export const aboutPage = (args: { metaImage: Media }): RequiredDataFromCollectionSlug<'pages'> => ({
   title: 'About Us',
   slug: 'about',
   _status: 'published',
@@ -160,9 +189,9 @@ export const aboutPage = (): RequiredDataFromCollectionSlug<'pages'> => ({
         {
           size: 'twoThirds',
           richText: richText([
-            heading('About AMARÉ', 'h2'),
+            heading('About NILUKSHI', 'h2'),
             paragraph(
-              'AMARÉ began as a small goldsmithing workshop in Colombo and has grown into a three-generation family atelier. We design and hand-finish every piece ourselves — from loose Ceylon gems to the finished ring, necklace or bangle you wear.',
+              'NILUKSHI began as a small goldsmithing workshop in Colombo and has grown into a three-generation family atelier. We design and hand-finish every piece ourselves — from loose Ceylon gems to the finished ring, necklace or bangle you wear.',
             ),
             paragraph(
               'We work in 18k and 22k gold across yellow, white and rose tones, alongside a dedicated gem room for natural diamonds and precious and semi-precious stones. Alongside fine jewellery, our silversmiths continue a long tradition of ceremonial silver articles. For anything one-of-a-kind, our custom jewellery studio takes commissions from first sketch to final polish.',
@@ -175,10 +204,17 @@ export const aboutPage = (): RequiredDataFromCollectionSlug<'pages'> => ({
       ],
     },
   ],
+  meta: {
+    title: 'About Our Colombo Atelier',
+    description:
+      'A three-generation family atelier in Colombo. We design and hand-finish every piece ourselves, from loose Ceylon gems to the ring you wear.',
+    image: args.metaImage.id,
+  },
 })
 
 export const contactPage = (args: {
   contactForm: Form
+  metaImage: Media
 }): RequiredDataFromCollectionSlug<'pages'> => ({
   title: 'Contact',
   slug: 'contact',
@@ -197,4 +233,10 @@ export const contactPage = (args: {
       introContent: richText([heading('Send us a message', 'h3')]),
     },
   ],
+  meta: {
+    title: 'Contact & Showroom in Colombo 07',
+    description:
+      'Visit our showroom at 24 Ward Place, Colombo 07, or reach us by phone and WhatsApp. Open Monday to Saturday, 10am to 7pm.',
+    image: args.metaImage.id,
+  },
 })

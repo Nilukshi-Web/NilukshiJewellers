@@ -15,6 +15,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
       <div className="relative aspect-[10/11] overflow-hidden bg-sand">
         {image && typeof image === 'object' ? (
           <Media
+            alt={product.name}
             resource={image}
             fill
             imgClassName="object-cover transition-transform duration-500 group-hover:scale-105"

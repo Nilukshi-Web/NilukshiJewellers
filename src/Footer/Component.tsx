@@ -21,7 +21,7 @@ export async function Footer() {
         <div>
           <Link href="/" className="inline-flex flex-col leading-none">
             <span className="font-serif text-3xl tracking-[0.12em] text-sand">
-              {headerData?.brandName || 'AMARÉ'}
+              {headerData?.brandName || 'NILUKSHI'}
             </span>
             {headerData?.brandTagline && (
               <span className="mt-0.5 text-[0.55rem] tracking-[0.35em] text-sage">

@@ -10,10 +10,14 @@ import { getPayload } from 'payload'
 import type { Media as MediaType } from '@/payload-types'
 
 import { Media } from '@/components/Media'
+import { absoluteMediaURL } from '@/utilities/absoluteMediaURL'
 import { formatPrice } from '@/utilities/formatPrice'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { getServerSideURL } from '@/utilities/getURL'
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { SITE_NAME } from '@/utilities/siteName'
 import { whatsappLink } from '@/utilities/whatsapp'
+import { PRODUCT_SECTIONS } from '@/collections/ProductCategories'
 import { cn } from '@/utilities/ui'
 import { ProductGallery } from './ProductGallery.client'
 
@@ -39,15 +43,9 @@ type Args = {
   }>
 }
 
-const specRows: { key: string; label: string }[] = [
-  { key: 'material', label: 'Material' },
-  { key: 'stoneType', label: 'Stone' },
-  { key: 'stoneColor', label: 'Stone Colour' },
-  { key: 'cut', label: 'Cut' },
-  { key: 'count', label: 'Count' },
-  { key: 'carat', label: 'Carat' },
-  { key: 'size', label: 'Size' },
-]
+const SECTION_LABELS: Record<string, string> = Object.fromEntries(
+  PRODUCT_SECTIONS.map(({ label, value }) => [value, label]),
+)
 
 export default async function ProductPage({ params: paramsPromise }: Args) {
   const { slug = '' } = await paramsPromise
@@ -71,18 +69,83 @@ export default async function ProductPage({ params: paramsPromise }: Args) {
     (product.category && typeof product.category === 'object' && product.category.title) ||
     null
 
-  const specs = specRows
-    .map(({ key, label }) => ({
-      label,
-      value: product.specs?.[key as keyof typeof product.specs],
-    }))
-    .filter((row) => row.value && row.value !== '—')
+  const specs = (product.specs || []).filter(
+    (row) => row.label && row.value && row.value !== '—',
+  )
+
+  const siteURL = getServerSideURL()
+  const productURL = `${siteURL}/products/${product.slug}`
+  const category = typeof product.category === 'object' ? product.category : null
+  const metal = typeof product.metal === 'object' ? product.metal : null
+
+  // Product + breadcrumb structured data, so search engines can show price,
+  // availability and the trail back to the collection page in results.
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      brand: { '@type': 'Brand', name: SITE_NAME },
+      description: product.description || undefined,
+      image: images.map((img) => absoluteMediaURL(img.url)).filter(Boolean),
+      name: product.name,
+      sku: product.slug || String(product.id),
+      url: productURL,
+      ...(category?.title ? { category: category.title } : {}),
+      ...(metal?.name ? { material: metal.name } : {}),
+      ...(specs.length > 0
+        ? {
+            additionalProperty: specs.map((row) => ({
+              '@type': 'PropertyValue',
+              name: row.label,
+              value: row.value,
+            })),
+          }
+        : {}),
+      // Omitted entirely for "price on request" pieces — Google treats an offer
+      // without a price as invalid markup.
+      ...(product.price != null
+        ? {
+            offers: {
+              '@type': 'Offer',
+              availability: product.available
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+              itemCondition: 'https://schema.org/NewCondition',
+              price: product.price,
+              priceCurrency: 'LKR',
+              seller: { '@type': 'Organization', name: SITE_NAME },
+              url: productURL,
+            },
+          }
+        : {}),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', item: `${siteURL}/`, name: 'Home', position: 1 },
+        {
+          '@type': 'ListItem',
+          item: `${siteURL}/${product.section}`,
+          name: SECTION_LABELS[product.section] || product.section,
+          position: 2,
+        },
+        { '@type': 'ListItem', name: product.name, position: 3 },
+      ],
+    },
+  ]
 
   return (
-    <article className="container grid grid-cols-1 gap-10 py-14 lg:grid-cols-2">
+    <article className="container grid grid-cols-1 items-start gap-10 py-14 lg:grid-cols-2">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger -- JSON-LD has to be injected as raw text
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <ProductGallery images={images} name={product.name} available={product.available ?? true} />
 
-      <div>
+      {/* Sticks alongside the gallery while it scrolls; top clears the sticky header. */}
+      <div className="lg:sticky lg:top-24">
         {eyebrow && (
           <div className="mb-2 text-xs uppercase tracking-[0.22em] text-wine">{eyebrow}</div>
         )}
@@ -104,7 +167,7 @@ export default async function ProductPage({ params: paramsPromise }: Args) {
           <table className="mt-6 w-full border-collapse text-sm">
             <tbody>
               {specs.map((row) => (
-                <tr key={row.label} className="border-b border-bronze/25">
+                <tr key={row.id || row.label} className="border-b border-bronze/25">
                   <td className="w-1/3 py-2 text-[0.7rem] uppercase tracking-wider text-bronze">
                     {row.label}
                   </td>
@@ -179,17 +242,37 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   if (!product) return {}
 
   const image = product.images?.[0]
+  // Prefer the 1200x630 `og` size so social cards are not cropped oddly.
   const ogImage =
-    image && typeof image === 'object' && image.url ? `${getServerSideURL()}${image.url}` : undefined
+    image && typeof image === 'object'
+      ? absoluteMediaURL(image.sizes?.og?.url || image.url)
+      : undefined
+
+  const description = product.description || `${product.name} — handcrafted by ${SITE_NAME}.`
 
   return {
-    title: `${product.name} | AMARÉ Jewellers`,
-    description: product.description || undefined,
-    openGraph: {
-      title: product.name,
-      description: product.description || undefined,
-      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+    alternates: {
+      canonical: `/products/${product.slug}`,
     },
+    description,
+    openGraph: mergeOpenGraph({
+      description,
+      title: product.name,
+      url: `/products/${product.slug}`,
+      ...(ogImage
+        ? {
+            images: [
+              {
+                alt: (typeof image === 'object' && image?.alt) || product.name,
+                height: 630,
+                url: ogImage,
+                width: 1200,
+              },
+            ],
+          }
+        : {}),
+    }),
+    title: `${product.name} | ${SITE_NAME}`,
   }
 }
 

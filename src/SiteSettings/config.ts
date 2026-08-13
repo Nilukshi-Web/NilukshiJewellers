@@ -101,9 +101,13 @@ export const SiteSettings: GlobalConfig = {
   ],
   hooks: {
     afterChange: [
-      ({ doc }) => {
-        revalidateTag('global_site-settings', 'max')
-        revalidatePath('/', 'layout')
+      ({ doc, req: { context } }) => {
+        // Skipped when seeding from the CLI, where there is no Next.js request
+        // context for revalidation to hook into.
+        if (!context.disableRevalidate) {
+          revalidateTag('global_site-settings', 'max')
+          revalidatePath('/', 'layout')
+        }
         return doc
       },
     ],

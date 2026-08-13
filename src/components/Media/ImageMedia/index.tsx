@@ -68,7 +68,9 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
     width = fullWidth!
     height = fullHeight!
-    alt = altFromResource || ''
+    // The upload's own alt text wins; the caller's is a fallback so images
+    // whose alt field was left empty are not published with an empty alt.
+    alt = altFromResource || altFromProps || ''
 
     const cacheTag = resource.updatedAt
 

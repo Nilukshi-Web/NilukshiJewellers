@@ -137,32 +137,33 @@ export const Products: CollectionConfig<'products'> = {
     },
     {
       name: 'specs',
-      type: 'group',
+      type: 'array',
       label: 'Specifications',
+      labels: { singular: 'Specification', plural: 'Specifications' },
       admin: {
-        description: 'Leave any field empty to hide that row on the product page.',
+        description:
+          'One row per specification, shown in order on the product page. E.g. Material / 18k yellow gold.',
+        initCollapsed: true,
+        components: {
+          RowLabel: '@/collections/Products/SpecRowLabel#SpecRowLabel',
+        },
       },
       fields: [
         {
           type: 'row',
           fields: [
-            { name: 'material', type: 'text', admin: { width: '50%' } },
-            { name: 'size', type: 'text', admin: { width: '50%' } },
-          ],
-        },
-        {
-          type: 'row',
-          fields: [
-            { name: 'stoneType', type: 'text', label: 'Stone Type', admin: { width: '50%' } },
-            { name: 'stoneColor', type: 'text', label: 'Stone Colour', admin: { width: '50%' } },
-          ],
-        },
-        {
-          type: 'row',
-          fields: [
-            { name: 'cut', type: 'text', admin: { width: '33%' } },
-            { name: 'count', type: 'text', admin: { width: '33%' } },
-            { name: 'carat', type: 'text', admin: { width: '33%' } },
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+              admin: { width: '33%', placeholder: 'Material' },
+            },
+            {
+              name: 'value',
+              type: 'text',
+              required: true,
+              admin: { width: '67%', placeholder: '18k yellow gold' },
+            },
           ],
         },
       ],

@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
+import { cdnFileURL } from '../utilities/cdn'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -42,7 +43,20 @@ export const Media: CollectionConfig = {
   upload: {
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
     staticDir: path.resolve(dirname, '../../public/media'),
-    adminThumbnail: 'thumbnail',
+    // Payload builds the admin thumbnail from the raw database row, which always
+    // holds its own `/api/media/file/...` path. That route is not served when the
+    // S3 plugin runs with `disablePayloadAccessControl`, so point the admin at the
+    // CDN directly. Falls back to the stored path when no CDN is configured.
+    adminThumbnail: ({ doc }) => {
+      const thumbnail = (doc?.sizes as Record<string, { filename?: string; url?: string }>)
+        ?.thumbnail
+
+      return (
+        cdnFileURL(thumbnail?.filename ?? doc?.filename, doc?.prefix) ??
+        thumbnail?.url ??
+        (typeof doc?.url === 'string' ? doc.url : null)
+      )
+    },
     focalPoint: true,
     imageSizes: [
       {

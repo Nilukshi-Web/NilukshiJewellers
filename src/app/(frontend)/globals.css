@@ -47,7 +47,7 @@
   --font-sans: var(--font-jost);
   --font-serif: var(--font-cormorant);
 
-  /* AMARÉ brand palette */
+  /* NILUKSHI brand palette */
   --color-wine: #933b5b;
   --color-sand: #e3d6bf;
   --color-sage: #aabaae;
@@ -96,7 +96,7 @@
 }
 
 :root {
-  /* AMARÉ light theme */
+  /* NILUKSHI light theme */
   --background: #fbf8f3;
   --foreground: #2b2320;
   --card: #f5efe4;

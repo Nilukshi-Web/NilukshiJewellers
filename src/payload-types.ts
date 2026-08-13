@@ -574,17 +574,15 @@ export interface Product {
    */
   story?: string | null;
   /**
-   * Leave any field empty to hide that row on the product page.
+   * One row per specification, shown in order on the product page. E.g. Material / 18k yellow gold.
    */
-  specs?: {
-    material?: string | null;
-    size?: string | null;
-    stoneType?: string | null;
-    stoneColor?: string | null;
-    cut?: string | null;
-    count?: string | null;
-    carat?: string | null;
-  };
+  specs?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -1789,13 +1787,9 @@ export interface ProductsSelect<T extends boolean = true> {
   specs?:
     | T
     | {
-        material?: T;
-        size?: T;
-        stoneType?: T;
-        stoneColor?: T;
-        cut?: T;
-        count?: T;
-        carat?: T;
+        label?: T;
+        value?: T;
+        id?: T;
       };
   generateSlug?: T;
   slug?: T;
