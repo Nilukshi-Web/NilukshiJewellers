@@ -2201,6 +2201,10 @@ export interface SiteSetting {
   email?: string | null;
   hours?: string | null;
   address?: string | null;
+  /**
+   * Google Maps link opened when the address is clicked.
+   */
+  mapUrl?: string | null;
   instagram?: string | null;
   facebook?: string | null;
   whatsappMessages?: {
@@ -2285,6 +2289,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   email?: T;
   hours?: T;
   address?: T;
+  mapUrl?: T;
   instagram?: T;
   facebook?: T;
   whatsappMessages?:

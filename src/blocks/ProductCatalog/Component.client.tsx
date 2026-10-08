@@ -37,10 +37,9 @@ export const CatalogClient: React.FC<Props> = ({
   const paramMetal = searchParams.get('metal')
   const paramCategory = searchParams.get('category')
 
+  // null means "All" metals
   const [activeMetal, setActiveMetal] = useState<string | null>(
-    showMetalTabs
-      ? metals.find((m) => m.slug === paramMetal)?.slug || metals[0]?.slug || null
-      : null,
+    showMetalTabs ? metals.find((m) => m.slug === paramMetal)?.slug || null : null,
   )
   const [activeCategory, setActiveCategory] = useState<string | null>(
     categories.find((c) => c.slug === paramCategory)?.slug || null,
@@ -49,7 +48,7 @@ export const CatalogClient: React.FC<Props> = ({
   // Keep tabs in sync when the URL changes (e.g. mega menu click while already on this page)
   useEffect(() => {
     if (showMetalTabs) {
-      setActiveMetal(metals.find((m) => m.slug === paramMetal)?.slug || metals[0]?.slug || null)
+      setActiveMetal(metals.find((m) => m.slug === paramMetal)?.slug || null)
     }
     setActiveCategory(categories.find((c) => c.slug === paramCategory)?.slug || null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,6 +76,19 @@ export const CatalogClient: React.FC<Props> = ({
     <section className="container py-16">
       {showMetalTabs && (
         <div className="mb-6 flex flex-wrap gap-2.5">
+          <button
+            onClick={() => {
+              setActiveMetal(null)
+              setActiveCategory(null)
+              syncUrl(null, null)
+            }}
+            className={cn(
+              'flex items-center gap-2 rounded-full border px-5 py-2 font-serif text-lg transition-colors',
+              !activeMetal ? 'border-ink bg-ink text-white' : 'border-bronze hover:bg-sand/50',
+            )}
+          >
+            All
+          </button>
           {metals.map((m) => (
             <button
               key={m.id}

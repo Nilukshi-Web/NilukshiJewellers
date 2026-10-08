@@ -37,13 +37,24 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({
       {/* Top utility bar */}
       <div className="bg-wine text-xs text-white">
         <div className="container flex items-center justify-between py-2 tracking-wide">
-          <span className="flex items-center gap-1.5">
-            {settings?.address && (
-              <>
-                <MapPin size={13} strokeWidth={1.6} /> {settings.address}
-              </>
-            )}
-          </span>
+          {settings?.address && settings.mapUrl ? (
+            <a
+              href={settings.mapUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 hover:underline hover:underline-offset-4"
+            >
+              <MapPin size={13} strokeWidth={1.6} /> {settings.address}
+            </a>
+          ) : (
+            <span className="flex items-center gap-1.5">
+              {settings?.address && (
+                <>
+                  <MapPin size={13} strokeWidth={1.6} /> {settings.address}
+                </>
+              )}
+            </span>
+          )}
           <Link href="/contact" className="flex items-center gap-1.5 underline underline-offset-4">
             <Phone size={13} strokeWidth={1.6} /> {data?.topBarText || 'Contact Us'}
           </Link>

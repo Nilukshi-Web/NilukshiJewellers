@@ -121,7 +121,20 @@ export const FormBlock: React.FC<
       <div className="p-4 lg:p-6 border border-border rounded-[0.8rem]">
         <FormProvider {...formMethods}>
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
-            <RichText data={confirmationMessage} />
+            <>
+              <RichText data={confirmationMessage} />
+              <Button
+                className="mt-6"
+                onClick={() => {
+                  formMethods.reset()
+                  setHasSubmitted(false)
+                }}
+                type="button"
+                variant="default"
+              >
+                Submit another response
+              </Button>
+            </>
           )}
           {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
           {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}

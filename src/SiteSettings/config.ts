@@ -50,8 +50,23 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
     {
-      name: 'address',
-      type: 'text',
+      type: 'row',
+      fields: [
+        {
+          name: 'address',
+          type: 'text',
+          admin: { width: '50%' },
+        },
+        {
+          name: 'mapUrl',
+          type: 'text',
+          label: 'Map Link',
+          admin: {
+            width: '50%',
+            description: 'Google Maps link opened when the address is clicked.',
+          },
+        },
+      ],
     },
     {
       type: 'row',

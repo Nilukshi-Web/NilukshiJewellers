@@ -280,6 +280,7 @@ export const seed = async ({
         instagram: 'https://instagram.com/nilukshijewellers',
         facebook: 'https://facebook.com/nilukshijewellers',
         address: '24 Ward Place, Colombo 07, Sri Lanka',
+        mapUrl: 'https://share.google/R5iTWJ5bgmca6xf8R',
         hours: 'Mon – Sat, 10am – 7pm',
         whatsappMessages: {
           general: 'Hi NILUKSHI, I have a question.',
